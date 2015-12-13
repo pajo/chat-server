@@ -4,6 +4,7 @@
   "description": "Yet another chat server",
   "main": "chat.js",
   "dependencies": {
+    "lodash-node": "^3.10.1",
     "primus": "^4.0.4",
     "ws": "^0.8.1"
   },
