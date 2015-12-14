@@ -22,6 +22,11 @@ var server = Primus.createServer(function connection(spark) {
 				fn = sendMessage;
 				break;
 			case 'leave':
+				spark.write({
+					id: payload.id,
+					type: 'goodbye'
+				});
+				
 				fn = removeUser;
 				break;				
 		}
@@ -38,11 +43,13 @@ function joinUser(spark, payload) {
 		if (payload.name)  {
 			if (_.some(users, function (user) { return user.name === payload.name; })){
 				spark.write({
+					id: payload.id,
 					type: 'error',
 					message: `User with ${ payload.name } already exists.`
 				});	
 			} else {
 				spark.write({
+					id: payload.id,
 					type: 'server-info',
 					users: _.map(users, function (user) {
 						return {
@@ -66,12 +73,14 @@ function joinUser(spark, payload) {
 			}
 		} else {
 			spark.write({
+				id: payload.id,
 				type: 'error',
 				message: 'You must provide name'
 			});	
 		}
 	} else {
 		spark.write({
+			id: payload.id,
 			type: 'error',
 			message: 'You must provide group'
 		});
@@ -93,6 +102,7 @@ function removeUser(spark) {
 	if (user) {
 		users.splice(index, 1);
 		
+	
 		send({
 			type: 'goodbye',
 			name: user.name,
