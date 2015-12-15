@@ -67,8 +67,10 @@ function joinUser(spark, payload) {
 				
 				send({
 					type: 'welcome',
-					name: payload.name,
-					group: payload.group
+					user: { 
+						name: payload.name,
+						group: payload.group
+					}
 				});
 			}
 		} else {
@@ -101,12 +103,10 @@ function removeUser(spark) {
 	
 	if (user) {
 		users.splice(index, 1);
-		
 	
 		send({
 			type: 'goodbye',
-			name: user.name,
-			group: user.group
+			user: user
 		});
 	}
 }
