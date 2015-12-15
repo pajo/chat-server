@@ -115,11 +115,16 @@ function sendMessage(spark, payload) {
 	var user = _.find(users, function (user) { return user.spark === spark; });
 	
 	if (user) {
-		send({
+		var message = {
 			type: 'message',
-			name: user.name,
-			group: user.group,
-			message: payload.message
-		});
+			from: user,
+			message: payload.message.message
+		};
+		
+		if (payload.group) {
+			message.group = payload.group;
+		}
+				
+		send(message);
 	}
 }
